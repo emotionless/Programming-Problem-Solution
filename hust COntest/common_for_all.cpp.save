@@ -1,0 +1,152 @@
+/*
+******************************************
+***** Bismillahir Rahmanir Rahim *********
+***** Full Name: Faruk Hossain Milon *****
+***** University: IIT-JU, BD ****************
+
+***** Codechef username: emotionless *****
+***** Topcoder handle: emotionless *******
+***** UVA username: emotionless **********
+***** Hust username: emotionless *********
+***** Codeforces handle: milon ***********
+******************************************
+***** Sorry for bad written code **********
+*/
+#include <cstring>
+#include <cassert>
+#include <vector>
+#include <list>
+#include <queue>
+#include <map>
+#include <set>
+#include <deque>
+#include <stack>
+#include <bitset>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <fstream>
+#include <climits>
+
+#define LL long long
+#define MX 100009
+#define MOD 1000000000+7
+#define N 1000007
+#define PB push_back
+#define FOR(ii,aa,bb) for(ii=aa; ii<=bb; ii++)
+#define loop(aa) for(int ii=0; ii<aa; ii++)
+#define rep(i,bb) for(i=0; i<bb; i++)
+#define clr(aa, bb) memset(aa, bb, sizeof aa)
+
+using namespace std;
+struct Z
+{
+    int st, ed, id;
+    bool operator < (const Z& A) const
+    {
+        if(ed == A.ed) return st < A.st;
+        return ed > A.ed;
+    }
+};
+
+vector < Z > V;
+int res[MX+5];
+int seg[4*MX+5];
+void update(int ind, int st, int ed, int pos, int val)
+{
+    // cout<<ind<<" "<<st<<" "<<ed<<" "<<pos<<" "<<endl;
+    if(st == ed)
+    {
+        seg[ind] += 1;
+        return;
+    }
+    int mid = (st + ed) / 2;
+    if(pos <= mid)
+        update(ind * 2, st, mid, pos, val);
+    else
+        update(ind * 2 + 1, mid + 1, ed, pos, val);
+    seg[ind] = seg[ind * 2] + seg[ind * 2 + 1];
+}
+
+int query(int ind, int st, int ed, int l, int r)
+{
+    if(st == l && ed == r)
+        return seg[ind];
+    int mid = (st + ed) / 2;
+    if(r <= mid)
+        return query(ind * 2, st, mid, l, r);
+    else if(l > mid)
+        return query(ind * 2 + 1, mid + 1, ed, l, r);
+    else
+        return query(ind * 2, st, mid, l, mid) + query(ind * 2 + 1, mid + 1, ed, mid + 1, r);
+}
+
+
+
+int main()
+{
+    // FILE * fin, * fout;
+    // fin=fopen("input.txt","r");
+    // fout=fopen("output.txt","w");
+
+    int i,j,k;
+    int n, m, u, v;
+    int t;
+    int cases = 1;
+    while(scanf("%d", &n)==1 && n)
+    {
+        Z tmp;
+        V.clear();
+        memset(seg, 0, sizeof seg);
+        memset(res, 0, sizeof res);
+        for(i = 0; i < n; i++)
+        {
+            scanf("%d %d", &tmp.st, &tmp.ed);
+            tmp.st++;
+            tmp.ed++;
+            tmp.id = i;
+            V.PB(tmp);
+        }
+        sort(V.begin(), V.end());
+        res[V[0].id] = query(1, 1, MX, 1, V[0].st);
+        update(1, 1, MX, V[0].st, 1);
+        for(i = 1; i < n; i++)
+        {
+            if(V[i].st == V[i-1].st && V[i].ed == V[i-1].ed)
+                res[V[i].id] = res[V[i-1].id];
+            else
+
+            res[V[i].id] = query(1, 1, MX, 1, V[i].st);
+
+            update(1, 1, MX, V[i].st, 1);
+        }
+        printf("%d", res[0]);
+        for(i = 1; i < n; i++)
+        {
+            printf(" %d", res[i]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
+/*
+
+1
+0.25 6
+30 0.07
+78 0.04
+56 0.08
+48 0.12
+57 0.02
+27 0.09
+
+*/

@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+
+/**********TYPE CASTING**********/
+#define LL long long
+#define MOD 1000000007
+
+
+using namespace std;
+
+LL fact[1001];
+
+void init()
+{
+    fact[0]=1LL;
+    for(LL i=1; i<=1000; i++)
+    {
+        fact[i]=(fact[i-1]*i)%MOD;
+    }
+}
+
+LL bigmod(LL p,LL e,LL M)
+{
+    if(e==0)return 1;
+    if(e%2==0)
+    {
+        LL t=bigmod(p,e/2,M);
+        return (t*t)%M;
+    }
+    return (bigmod(p,e-1,M)*p)%M;
+}
+
+LL modinverse(LL a,LL M)
+{
+    return bigmod(a,M-2,M)%MOD;
+}
+
+
+LL NCR(int N, int R)
+{
+    return (fact[N]*modinverse((fact[N-R]*fact[R])%MOD, MOD))%MOD;
+}
+
+int main()
+{
+    // ios_base::sync_with_stdio(0);
+    //cin.tie(0);
+    // FILE * fin, * fout;
+    // fin=fopen("input.txt","r");
+    // fout=fopen("output.txt","w");
+
+    int i,j,k;
+    init();
+    int n,m,num;
+    cin>>n>>m;
+    LL res=0;
+    for(i=0; i<=m; i++)
+    {
+        res=(res+NCR(n,i))%MOD;
+    }
+    cout<<res<<endl;
+
+
+
+    return 0;
+}

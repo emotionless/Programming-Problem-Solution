@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+int x, y, gcd;
+
+void solve(int a, int b)
+{
+    int q, r;
+
+    int s0, s1, t0, t1;
+    while(b>0)
+    {
+        q = a / b;
+        r = a % b;
+        
+        int tmp = a - b * q;
+        a = b;
+        b= tmp;
+        
+        tmp = s0 - s1 * q;
+        s0 = s1;
+        s1 = tmp;
+        
+        tmp = t0 - t1 * q;
+        t0 = t1;
+        t1 = tmp;
+    }
+
+}
+
+
+int main()
+{
+    int i, j,k ;
+    int n;
+    int a, b, c;
+
+    cin>>a>>b>>c;
+
+    solve(a, b);
+
+
+
+
+return 0;
+}

@@ -1,0 +1,91 @@
+#include <bits/stdc++.h>
+
+#define LL long long
+#define MX 5000+7
+#define MOD 1000000007
+#define N 1000007
+#define check_bit(a,b) (a & (1<<b))
+#define PB push_back
+#define FOR(aa,nn) for(aa=0; aa<nn; aa++)
+
+
+using namespace std;
+
+
+
+LL arr[100001];
+LL sum[100001];
+int main()
+{
+    //   FILE * fin, * fout, *fp;
+//     fp=fopen("out.txt", "w");
+
+    int i,j;
+    int a,b;
+    int p;
+    int n;
+    int t;
+    LL P, Q;
+    cin>>n;
+    for(i = 0; i < n; i++)
+    {
+        cin>>arr[i];
+    }
+    sort(arr, arr + n);
+
+    cin>>P>>Q;
+
+    vector<LL>V;
+
+    for(i = 0; i < n - 1; i++)
+    {
+        LL dis = (llabs(arr[i+1] + arr[i]))/2;
+        if(dis>=P && dis<=Q)
+            V.PB(dis);
+    }
+
+    int sz = V.size();
+    V.clear();
+    LL mn = 10000000000;
+    for(i = 0; i < sz; i++)
+    {
+        for(j = 0; j < n; j++)
+            mn = min(mn, llabs(arr[j] - V[i]));
+    }
+
+    for(i = 0; i < n; i++)
+    {
+        LL lft = arr[i] - mn;
+        if(lft>=P && lft<=Q)
+        {
+            LL dis = 10000000000;
+            for(j = 0; j < n; j++)
+                dis = min(dis, llabs(arr[j] - lft));
+            if(dis == mn)
+            {
+                cout<<lft<<endl;
+                break;
+            }
+        }
+
+        lft = arr[i] + mn;
+        if(lft>=P && lft<=Q)
+        {
+            LL dis = 10000000000;
+            for(j = 0; j < n; j++)
+                dis = min(dis, llabs(arr[j] - lft));
+            if(dis == mn)
+            {
+                cout<<lft<<endl;
+                break;
+            }
+        }
+    }
+    return 0;
+}
+
+/*
+
+4544545454
+
+*/

@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+
+#define LL long long
+#define MX 5000+7
+#define MOD 1000000007
+#define N 1000007
+#define check_bit(a,b) (a & (1<<b))
+#define PB push_back
+#define FOR(aa,nn) for(aa=0; aa<nn; aa++)
+
+
+using namespace std;
+
+struct Z
+{
+    int st;
+    int ed;
+    bool operator<(const Z& A) const
+    {
+        return st<A.st;
+    }
+};
+vector<Z>V;
+
+int main()
+{
+    //   FILE * fin, * fout, *fp;
+//     fp=fopen("out.txt", "w");
+
+    int i,j;
+    int a,b;
+    string str;
+    int n;
+    cin>>n;
+    Z tmp;
+
+    FOR(i,n)
+    {
+        cin>>str;
+
+        tmp. st=(str[0]-'0')*10 + (str[1]-'0');
+        tmp. ed=(str[3]-'0')*10 + (str[4]-'0');
+        V.PB(tmp);
+    }
+    sort(V.begin(), V.end());
+    
+    for(i=0; i<n-1; i++)
+    {
+        if(V[i].ed>V[i+1].st)
+        {
+            
+        }
+    }
+
+
+    return 0;
+}
+
+/*
+
+4544545454
+
+*/

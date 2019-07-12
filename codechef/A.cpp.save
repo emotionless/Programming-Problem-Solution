@@ -1,0 +1,93 @@
+/*
+******************************************
+***** Bismillahir Rahmanir Rahim *********
+***** Full Name: Faruk Hossain Milon *****
+***** University: IIT-JU, BD ****************
+
+***** Codechef username: emotionless *****
+***** Topcoder handle: emotionless *******
+***** UVA username: emotionless **********
+***** Hust username: emotionless *********
+***** Codeforces handle: milon ***********
+******************************************
+***** Sorry for bad writen code **********
+*/
+
+
+#include <bits/stdc++.h>
+
+#define LL long long
+#define MAX 100000001
+#define MOD 1000000007
+#define N 1000007
+#define PB push_back
+#define set_mask(a,b) (a|(1<<b))
+
+
+using namespace std;
+
+bool is_prime[MAX];
+
+bool sieve()
+{
+    long long i,j;
+    int k=1;
+    int sq=(sqrt(MAX));
+
+
+
+    for(i=3; i<=sq; i++)
+    {
+        if(!is_prime[i] && is_prim)
+        {
+            for(j=i+i; j<=MAX; j+=(i))
+                is_prime[j]=1;
+        }
+    }
+}
+
+int main()
+{
+    // FILE * fin, * fout;
+    // fin=fopen("input.txt","r");
+    // fout=fopen("output.txt","w");
+
+    int i,j,k;
+    LL num;
+    sieve();
+    int t;
+    scanf("%d", &t);
+    while(t--)
+    {
+        scanf("%lld", &num);
+        if(num%2==0)
+        {
+            if(num==16)
+                printf("Tom\n");
+            else
+                printf("Mike\n");
+        }
+        else
+        {
+            if(!is_prime[num])
+                printf("Tom\n");
+            else
+                printf("Mike\n");
+        }
+    }
+
+
+
+
+    return 0;
+}
+
+/*
+
+5 4
+2 1 2
+2 2 3
+2 3 4
+1 5
+
+*/

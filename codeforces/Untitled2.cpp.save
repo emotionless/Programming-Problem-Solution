@@ -1,0 +1,38 @@
+int id;
+int Index[MAX];
+int low[MAX];
+int Stack[MAX];
+bool isStack[MAX];
+int top;
+// low for lowest id where the node can go.
+
+int tarjan(int u, int par)
+{
+    Index[u] = low[u] = (id++);
+    Stack[top++] = u;
+    isStack[u] = true;
+    int sz = G[u].size();
+    for(int i = 0; i < sz; i++)
+    {
+        int v = G[u][i];
+        if(v == par) continue;
+        if(Index[v] == (-1))
+        {
+            tarjan(v, u);
+            low[u] = min(low[u], low[v]);
+        }
+        else if(isStack[v])
+            low[u] = min(low[u], Index[v]);
+    }
+    int v;
+    if(Index[u] == low[u])
+    {
+        do
+        {
+            v = Stack[--top];
+            isStack[v] = false;
+            val[v] = u;
+        }
+        while(v != u);
+    }
+}

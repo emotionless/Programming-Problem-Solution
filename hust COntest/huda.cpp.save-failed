@@ -1,0 +1,111 @@
+#include<iostream>
+#include<string>
+#include<cstring>
+#include<queue>
+#include<cstdio>
+#include<algorithm>
+#include<cctype>
+using namespace std;
+const int inf=1<<30;
+struct  node
+ {
+     int u,v,w;
+     int used;//标记改变是否在最小生成树中
+     int del;//标记是否取该边
+ }e[260010];
+ int fa[1001];
+ int n,m,i,j,k;
+ bool  gs_first;
+ int find(int x)//非递归的
+  {
+      int s;
+      for(s=x;fa[s]>=0;s=fa[s]);
+      while(s!=x)
+       {
+           int t=fa[x];
+           fa[x]=s;
+           x=t;
+       }
+       return s;
+  }
+  void  Unon(int x,int y)
+   {
+       int x1=find(x);
+       int y1=find(y);
+       if(x1!=y1)
+        fa[x1]=y1;
+   }
+   bool  cmp(node a,node b)
+      {
+          return a.w<b.w;
+      }
+   void  initset()
+    {
+        for(int it=1;it<=n;it++)
+         fa[it]=-1;
+    }
+   void  init()
+    {
+        cin>>n>>m;
+        initset();
+        for(i=0;i<m;i++)
+        {
+            cin>>e[i].u>>e[i].v>>e[i].w;
+            e[i].del=0;
+            e[i].used=0;
+        }
+        sort(e,e+m,cmp);
+    }
+    int kruskar()
+     {
+         int num=0;
+         int sum=0;
+         for(int it=0;it<m;it++)
+          {
+              if(e[it].del==1)
+               continue;
+              int u=e[it].u;
+              int v=e[it].v;
+              if(find(u)!=find(v))
+               {
+                 num++;
+                 sum+=e[it].w;
+                 Unon(u,v);
+                 if(gs_first)
+                  e[it].used=1;
+               }
+
+               if(num>=n-1)
+                break;
+          }
+          if(num<n-1)
+           return -1;
+          return sum;
+     }
+     int main()
+     {
+         init();
+         gs_first=true;
+         int w1=kruskar();
+         gs_first=false;
+         initset();
+         int w2,min=inf;
+         for(i=0;i<m;i++)
+          {
+             if(e[i].used==1)//枚举求次小生成树
+              {
+                  e[i].del=1;
+                  initset();
+                  w2=kruskar();
+                  if(w2<min&&w2!=-1)
+                   min=w2;
+                  e[i].del=0;
+              }
+          }
+          cout<<"Cost: "<<w1<<endl;
+          if(min==inf)
+           cout<<"Cost: "<<"-1"<<endl;
+          else
+           cout<<"Cost: "<<min<<endl;
+           return 0;
+     }

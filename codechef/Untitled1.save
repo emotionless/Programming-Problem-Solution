@@ -1,0 +1,100 @@
+/*
+******************************************
+***** Bismillahir Rahmanir Rahim *********
+***** Full Name: Faruk Hossain Milon *****
+***** University: IIT-JU, BD ****************
+
+***** Codechef username: emotionless *****
+***** Topcoder handle: emotionless *******
+***** UVA username: emotionless **********
+***** Hust username: emotionless *********
+***** Codeforces handle: milon ***********
+******************************************
+***** Sorry for bad written code **********
+*/
+
+
+#include <bits/stdc++.h>
+
+#define LL long long
+#define MX 10009
+#define MOD 1000000007
+#define PB push_back
+#define set_mask(a,b) (a|(1<<b))
+#define FOR(i, b) for(i = 0; i < b; i++)
+
+using namespace std;
+
+int par[MX];
+LL S[MX];
+
+int DFS(int src)
+{
+    if(par[src] == src)
+    {
+        return src;
+    }
+    return par[src] = DFS(par[src]);
+}
+
+
+int main()
+{
+    // FILE * fin, * fout;
+    // fin=fopen("input.txt","r");
+    // fout=fopen("output.txt","w");
+
+    int t,j,i,k;
+    int n, m;
+    int tmp;
+    scanf("%d", &t);
+    while(t--)
+    {
+        scanf("%d", &n);
+        FOR(i, n)
+        {
+            scanf("%lld", &S[i+1]);
+            par[i+1] = i+1;
+        }
+        int q, op, val, x, y;
+        scanf("%d", &q);
+        FOR(i, q)
+        {
+            scanf("%d", &op);
+            if(op)
+            {
+                scanf("%d", &val);
+                int res = DFS(val);
+                printf("%d\n", res);
+            }
+            else
+            {
+                scanf("%d %d", &x, &y);
+                int par1 = DFS(x);
+                int par2 = DFS(y);
+                if(par1 == par2)
+                    printf("Invalid query!\n");
+                else
+                {
+                    if(S[par1] == S[par2]) continue;
+                    if(S[par1] > S[par2])
+                    {
+                        S[par1] += S[par2];
+                        par[par2] = par1;
+                    }
+                    else
+                    {
+                        S[par2] += S[par1];
+                        par[par1] = par2;
+                    }
+                }
+            }
+        }
+
+    }
+    return 0;
+}
+
+/*
+
+*/
