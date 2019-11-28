@@ -114,7 +114,6 @@ int main()
     int cases = 1, t;
     int n, m, q, op;
     int x1, x2, y1, y2;
-    /// lightoj 1266
 
     scanf("%d", &t);
     while(t--)

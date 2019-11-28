@@ -174,171 +174,51 @@ void sc(char &c) {
 
 ///***** Template ends here *****///
 ///********************* Code starts here ****************************
-string str[MAXNUM];
-struct Z {
-    int st, ed, ind;
-    Z() {}
-    Z(int _, int __, int ___) {
-        st = _;
-        ed = __;
-        ind = ___;
-    }
-};
 
-vector<Z> V;
+int dp[1<<20 + 5];
 
-void takeRight(int cnt, int st, int ed) {
-    int last = ed + cnt;
-    V.resize(last+1);
-    for(int i = ed; i >= st; i--) {
-        V[i+cnt] = V[i];
-    }
-    return;
-}
-
-void addString(int pos, int len, int ind) {
-    int sz = V.size();
+int getSum(int mask, int n) {
     int sum = 0;
-    int pre = 0;
-
-    if(sum == pos) {
-        takeRight(1, 0, sz - 1);
-        V[0] = Z(0, len, ind);
-        return;
+    for(int i = 1; i <= n; i++) {
+        if(mask&(1<<i)) sum += i;
     }
-
-    for(int i = 0; i < sz; i++) {
-        pre = sum;
-        sum += (V[i].ed - V[i].st + 1);
-//        cout<<sum<<endl;
-        if(sum == pos) {
-            takeRight(1, i+1, sz - 1);
-            V[i+1] = Z(0, len, ind);
-            return;
-        } else if(sum > pos) {
-            takeRight(2, i+1, sz - 1);
-            int point = pos - pre;
-            int st = V[i].st, ed = V[i].ed, id = V[i].ind;
-            V[i] = Z(st, point - 1, id);
-            V[i+1] = Z(0, len, ind);
-            V[i+2] = Z(point, ed, id);
-//            cout<<point<<" sdf "<<endl;
-            return;
-        }
-    }
-    V.pb(Z(0, len, ind));
-
-    return;
+    return sum;
 }
 
-int deleteTill(int ind, int have) {
-    int sz = V.size();
-    for(int i = ind; i < sz; i++) {
-        int now = V[i].ed - V[i].st + 1;
-        if(now <= have) {
-            have -= now;
-        } else {
-            V[i].st += have;
-            return i;
+bool checkIfICanWind(int mask, int maxChoosableInteger, int desiredTotal) {
+    int sum = getSum(mask, maxChoosableInteger);
+    if(sum >= desiredTotal) return false;
+    int &ret = dp[mask];
+    if(ret != -1) return ret;
+    ret = 0;
+    for(int i = 1; i <= maxChoosableInteger; i++) {
+        if(mask&(1<<i) == 0) {
+            if(checkIfICanWind(mask|(1<<i), maxChoosableInteger, desiredTotal) == false) ret = true;
         }
     }
-    return sz;
+    return true;
 }
 
-void copyInto(int to, int from) {
-    int sz = V.size();
-    int cnt = 0;
-    for(int i = from; i < sz; i++) {
-        V[to+cnt] = V[i];
-        cnt++;
+bool canIWin(int maxChoosableInteger, int desiredTotal) {
+    memset(dp, -1, sizeof dp);
+
+    for(int i = 1<<maxChoosableInteger; i > 0; i--) {
+        dp[i] = checkIfICanWin(i, maxChoosableInteger, desiredTotal);
     }
-    V.resize(to+cnt);
-
-    return;
-}
-
-void deleteString(int pos, int len) {
-    int sz = V.size();
-    int sum = 0;
-    int pre = 0;
-
-    if(sum == pos) {
-        int get = deleteTill(0, len);
-        copyInto(0, get);
-        return;
+    for(int i = 1; i <= maxChoosableInteger; i++) {
+        if(dp[i] == true) return true;
     }
-
-    for(int i = 0; i < sz; i++) {
-        pre = sum;
-        sum += (V[i].ed - V[i].st + 1);
-//        cout<<sum<<endl;
-        if(sum == pos) {
-            int get = deleteTill(i+1, len);
-            copyInto(i+1, get);
-            return;
-        } else if(sum > pos) {
-            int point = pos - pre;
-            int st = V[i].st, ed = V[i].ed, id = V[i].ind;
-            int cur = (ed - point + 1);
-            if (len == cur) {
-                V[i] = Z(st, point - 1, id);
-            }
-            else if(len < cur) {
-                V[i] = Z(st, point - 1, id);
-                takeRight(1, i+1, sz - 1);
-                int nxt = point + len;
-                V[i+1] = Z(nxt, ed, id);
-            } else {
-                int get = deleteTill(i+1, len - cur);
-                copyInto(i+1, get);
-                V[i] = Z(st, point - 1, id);
-            }
-//            V[i] = Z(st, point - 1, id);
-//            V[i+1] = Z(0, len, ind);
-//            V[i+2] = Z(point, ed, id);
-//            cout<<point<<" sdf "<<endl;
-            return;
-        }
-    }
-
-    return;
-}
-
-void print() {
-    int sz = V.size();
-    for(int i = 0; i < sz; i++) {
-        int st = V[i].st;
-        int ed = V[i].ed;
-        int ind = V[i].ind;
-        for(int j = st; j <= ed; j++) {
-            cout<<str[ind][j];
-        }
-    }
-    cout<<endl;
+    return false;
 }
 
 int main() {
     int i, t, cases = 1, j, k, pos;
+    int n;
 
-    int ind = 0;
-    cin>>str[++ind];
-    addString(0, str[ind].length() - 1, ind);
-    int q;
-    cin>>q;
-    while(q--) {
-        int op;
-        cin>>op;
-        if(op == 1) {
-            cin>>pos>>str[++ind];
-            addString(pos, str[ind].length() - 1, ind);
-        } else if(op == 2) {
-            int len;
-            cin>>pos>>len;
-            deleteString(pos, len);
-        } else {
-            print();
-        }
-    }
+    n = 10;
+    int m = 11;
+
+    cout<<canIWin(n, m)<<endl;
 
 
     return 0;
@@ -346,11 +226,5 @@ int main() {
 
 /*
 
-ABCDefg
-4
-1 0 MILON
-1 5 FARUK
-1 17 HOSSAIN
-3
 
 */

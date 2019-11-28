@@ -4,39 +4,57 @@
 
 using namespace std;
 
-bool isOkay(char open,char close);
-bool isCheck(string exp);
+struct Node {
+    int data;
+    Node *next;
+    Node(int x) {
+        data = x;
+        next = NULL;
+    }
+};
 
-int main() {
-    // main func code goes here
+Node *head;
 
-    return 0;
-}
-
-bool isCheck(string exp){
-    stack<char>s;
-    int i;
-
-    for(i=0;i<exp.length();i++){
-        if(exp[i] == '(' || exp[i] == '{' || exp[i] == '['){
-            s.push(exp[i]);
+void Remove(int d) {
+    Node *t, *prev;
+    if (!head) return;
+    t = head;
+    if (head->data == d) {
+        head = head->next;
+        delete t;
+    }
+    else {
+        while (t != nullptr && t->data != d) {
+            prev = t;
+            t = t->next;
         }
-        else if(exp[i] == ')' || exp[i] == '}' || exp[i] == ']'){
-            if(s.empty() || !isOkay(s.top(),exp[i])){
-                return false;
-            }
-            else{
-                s.pop();
-            }
+        if (t) {
+            prev->next = t->next;
+            delete t;
+        }
+        else {
+            cout << "value not found" << endl;
         }
     }
-    return s.empty() ? true : false;
 }
 
-bool isOkay(char open , char close){
-    if(open == '(' && open == ')') return true;
-     else if(open == '{' && open == '}') return true;
-      else if(open == '[' && open == ']') return true;
 
-    return false;
+int main() {
+    head = new Node(1);
+    Node *prev = head;
+    Node *save = head;
+    for(int i = 2; i < 10; i++) {
+        prev -> next = new Node(i);
+        prev = prev->next;
+    }
+
+
+    Remove(5);
+
+    while(head != NULL) {
+        cout<<head->data<<endl;
+        head = head -> next;
+    }
+
+    return 0;
 }

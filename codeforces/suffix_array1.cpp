@@ -61,15 +61,17 @@ int main()
         for(i=0; i < N; i++)
             P[stp][L[i].p] = i> 0 && L[i].nr[0]==L[i-1].nr[0] && L[i].nr[1] == L[i- 1].nr[1] ? P[stp][L[i-1].p] : i;
     }
-
+    int after_sorting[N];
     for(i = 0; i < N; i++)
     {
-        cout<<i<<" "<<P[stp - 1][i]<<endl;
-//        cout<<i<<" "<<A.substr(P[stp-1][i])<<endl;
+        after_sorting[ P[stp - 1][i] ] = i;
+    }
+    for(int i = 0; i < N; i++) {
+        cout<<i<<"'th position come "<<after_sorting[i]<<" index from original"<<endl;
     }
 
 
-    cout<<find_LCP(0,3);
+//    cout<<find_LCP(0,3);
 
 
     return 0;
